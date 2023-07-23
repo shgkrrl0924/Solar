@@ -1,0 +1,23 @@
+Table_dataset_RGBYV
+
+X_train, X_test, y_train, y_test = train_test_split(Table_dataset_RGBYV.iloc[:, :-1], Table_dataset_RGBYV.iloc[:, -1], test_size=0.3, random_state=42)
+
+
+tpot =  TPOTRegressor(generations=20, population_size=5, verbosity=2, random_state=42, cv=3, n_jobs = -1)
+tpot.fit(X_train, y_train)
+
+tpot.export('tpot_pipeline_cv.py')
+
+
+y_pred = tpot.predict(X_test)
+y_pred
+
+
+plt.plot(y_test.values,'x', label = 'True')
+plt.plot(y_pred,'*', label = 'Predict')
+
+pd.DataFrame({'True': y_test.values, 'Predict': y_pred})
+
+
+mse = np.mean((y_pred - y_test)**2)
+mse
